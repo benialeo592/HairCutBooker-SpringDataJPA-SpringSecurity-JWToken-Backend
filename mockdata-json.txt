@@ -1,0 +1,53 @@
+Utenti e prenotazioni
+
+{
+  "nome": "Mario",
+  "cognome": "Rossi",
+  "email": "mario.rossi@example.com",
+  "password": "password123",
+  "prenotazioni": [
+    {
+      "dataPrenotazione": "2023-09-20T10:00:00",
+      "dataPrestazione": "2023-09-22T15:30:00",
+      "statoPrenotazione": "CONFERMATA"
+    },
+    {
+      "dataPrenotazione": "2023-09-25T14:00:00",
+      "dataPrestazione": "2023-09-27T11:00:00",
+      "statoPrenotazione": "CONFERMATA"
+    }
+  ]
+}
+
+{
+  "nome": "Giulia",
+  "cognome": "Bianchi",
+  "email": "giulia.bianchi@example.com",
+  "password": "pass123",
+  "prenotazioni": [
+    {
+      "dataPrenotazione": "2023-09-21T14:00:00",
+      "dataPrestazione": "2023-09-25T09:30:00",
+      "statoPrenotazione": "CONFERMATA"
+    },
+    {
+      "dataPrenotazione": "2023-09-26T10:30:00",
+      "dataPrestazione": "2023-09-28T16:00:00",
+      "statoPrenotazione": "CONFERMATA"
+    }
+  ]
+}
+
+{
+  "nome": "Luca",
+  "cognome": "Verdi",
+  "email": "luca.verdi@example.com",
+  "password": "psw456",
+  "prenotazioni": [
+    {
+      "dataPrenotazione": "2023-09-22T16:30:00",
+      "dataPrestazione": "2023-09-26T10:00:00",
+      "statoPrenotazione": "CONFERMATA"
+    }
+  ]
+}
