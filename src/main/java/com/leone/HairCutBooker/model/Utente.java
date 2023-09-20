@@ -17,7 +17,7 @@ public class Utente {
     private String email;
     private String password;
 
-    @OneToMany(targetEntity = Prenotazione.class, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Prenotazione.class, cascade = CascadeType.REMOVE)
     @JoinColumn(name ="id_utente",referencedColumnName = "id")
     private List<Prenotazione> prenotazioni;
 

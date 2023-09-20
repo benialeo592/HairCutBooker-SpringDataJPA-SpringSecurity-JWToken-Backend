@@ -14,7 +14,7 @@ public class Prenotazione {
     private LocalDateTime dataPrenotazione;
     private LocalDateTime dataPrestazione;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id_utente")
     private Utente utente;
 

@@ -1,6 +1,7 @@
 package com.leone.HairCutBooker.service;
 
 
+import com.leone.HairCutBooker.DTO.PrenotazioneDTO;
 import com.leone.HairCutBooker.DTO.UtenteDTO;
 import com.leone.HairCutBooker.model.Prenotazione;
 import com.leone.HairCutBooker.model.Utente;
@@ -9,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +49,7 @@ public class UtenteService {
             return new UtenteDTO(utenteAggiornato.getId(), utenteAggiornato.getNome(), utenteAggiornato.getCognome(), utenteAggiornato.getEmail());
     }
 
-    public List<Prenotazione>  getPrenotazioniUtente(Long idUtente) throws EntityNotFoundException{
+    public List<Prenotazione> getPrenotazioniUtente(Long idUtente) throws EntityNotFoundException{
         Optional<Utente> utente = this.utenteRepo.findById(idUtente);
         if(utente.isEmpty()){
             throw new EntityNotFoundException("Utente non trovato, lista inesistente");
@@ -55,21 +57,34 @@ public class UtenteService {
         return utente.get().getPrenotazioni();
     }
 
-    public List<Prenotazione> aggiungiPrenotazioneAdUtente(Long idUtente, Prenotazione prenotazione){
+    public List<PrenotazioneDTO> aggiungiPrenotazioneAdUtente(Long idUtente, Prenotazione prenotazione) throws EntityNotFoundException{
         Optional<Utente> utente = this.utenteRepo.findById(idUtente);
         if(utente.isEmpty()){
             throw new EntityNotFoundException("Utente non trovato, lista inesistente");
         }
         utente.get().getPrenotazioni().add(prenotazione);
-        return utente.get().getPrenotazioni();
+        List<PrenotazioneDTO> listaDaRitornare = new ArrayList<>();
+        utente.get().getPrenotazioni()
+                .forEach(element -> {
+                    listaDaRitornare.add
+                            (new PrenotazioneDTO(element.getId(),
+                                    element.getDataPrenotazione(),
+                                    element.getDataPrestazione(),
+                                    element.getStatoPrenotazione(),
+                                    element.getPrestazioni()));
+                            });
+        return listaDaRitornare;
+        //bisogna salvare la lista a db
     }
 
-    public List<Prenotazione> rimuoviPrenotazioneDaUtente(Long idUtente, Long idPrenotazione){
+    public List<Prenotazione> rimuoviPrenotazioneDaUtente(Long idUtente, Long idPrenotazione) throws EntityNotFoundException{
         Optional<Utente> utente = this.utenteRepo.findById(idUtente);
         if(utente.isEmpty()){
             throw new EntityNotFoundException("Utente non trovato, lista inesistente");
         }
-        Optional<Prenotazione> prenotazioneTrovata = utente.get().getPrenotazioni().stream().filter( prenotazione -> prenotazione.getId().equals(idPrenotazione)).findFirst();
+        Optional<Prenotazione> prenotazioneTrovata = utente.get().getPrenotazioni()
+                                                                    .stream()
+                                                                    .filter( prenotazione -> prenotazione.getId().equals(idPrenotazione)).findFirst();
         if(prenotazioneTrovata.isEmpty()){
             throw new EntityNotFoundException("Prenotazione non trovata");
         }
