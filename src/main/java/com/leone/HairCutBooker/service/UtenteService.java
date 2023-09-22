@@ -27,9 +27,11 @@ public class UtenteService {
     }
 
     public UtenteDTO cercaUtente(Long id){
-
-        Utente utente = this.utenteRepo.findById(id).get();
-        return new UtenteDTO(utente.getId(), utente.getNome(), utente.getCognome(), utente.getEmail());
+       Optional<Utente> utente = this.utenteRepo.findById(id);
+        if(utente.isEmpty()){
+            throw new EntityNotFoundException("Utente non trovato");
+        }
+        return new UtenteDTO(utente.get().getId(), utente.get().getNome(), utente.get().getCognome(), utente.get().getEmail());
     }
 
     public UtenteDTO creaUtente(Utente utente){

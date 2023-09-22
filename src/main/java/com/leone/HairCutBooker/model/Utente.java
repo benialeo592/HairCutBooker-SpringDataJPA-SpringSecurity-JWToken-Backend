@@ -20,7 +20,8 @@ public class Utente {
     private String email;
     private String password;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy="utente")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy="utente")
+    @JsonManagedReference
     private List<Prenotazione> prenotazioni;
 
     public Utente(Long id, String nome, String cognome, String email, String password) {

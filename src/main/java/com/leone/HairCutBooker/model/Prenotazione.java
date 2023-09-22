@@ -2,6 +2,7 @@ package com.leone.HairCutBooker.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -17,11 +18,12 @@ public class Prenotazione {
     private LocalDateTime dataPrenotazione;
     private LocalDateTime dataPrestazione;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_utente")
+    @JsonBackReference
     private Utente utente;
 
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(
             name = "prenotazione_prestazione",
             joinColumns = @JoinColumn(name = "prenotazione_id"),
