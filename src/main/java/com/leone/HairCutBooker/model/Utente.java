@@ -1,5 +1,8 @@
 package com.leone.HairCutBooker.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,10 +20,8 @@ public class Utente {
     private String email;
     private String password;
 
-    @OneToMany(targetEntity = Prenotazione.class, cascade = CascadeType.REMOVE)
-    @JoinColumn(name ="id_utente",referencedColumnName = "id")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy="utente")
     private List<Prenotazione> prenotazioni;
-
 
     public Utente(Long id, String nome, String cognome, String email, String password) {
         this.id= id;
@@ -77,4 +78,5 @@ public class Utente {
     public void setPrenotazioni(List<Prenotazione> prenotazioni) {
         this.prenotazioni = prenotazioni;
     }
+
 }

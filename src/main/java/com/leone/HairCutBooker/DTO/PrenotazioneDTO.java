@@ -50,4 +50,8 @@ public class PrenotazioneDTO {
     public void setDataPrestazione(LocalDateTime dataPrestazione) {
         this.dataPrestazione = dataPrestazione;
     }
+
+    public StatoPrenotazione getStatoPrenotazione() {
+        return this.statoPrenotazione;
+    }
 }

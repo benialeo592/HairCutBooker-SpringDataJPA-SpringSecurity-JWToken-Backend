@@ -1,5 +1,8 @@
 package com.leone.HairCutBooker.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -14,8 +17,8 @@ public class Prenotazione {
     private LocalDateTime dataPrenotazione;
     private LocalDateTime dataPrestazione;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "id_utente")
+    @ManyToOne
+    @JoinColumn(name="id_utente")
     private Utente utente;
 
     @ManyToMany
@@ -61,5 +64,37 @@ public class Prenotazione {
 
     public StatoPrenotazione getStatoPrenotazione() {
         return statoPrenotazione;
+    }
+
+    public void setDataPrenotazione(LocalDateTime dataPrenotazione) {
+        this.dataPrenotazione = dataPrenotazione;
+    }
+
+    public void setDataPrestazione(LocalDateTime dataPrestazione) {
+        this.dataPrestazione = dataPrestazione;
+    }
+
+    public void setUtente(Utente utente) {
+        this.utente = utente;
+    }
+
+    public void setPrestazioni(Set<Prestazione> prestazioni) {
+        this.prestazioni = prestazioni;
+    }
+
+    public void setStatoPrenotazione(StatoPrenotazione statoPrenotazione) {
+        this.statoPrenotazione = statoPrenotazione;
+    }
+
+    @Override
+    public String toString() {
+        return "Prenotazione{" +
+                "id=" + id +
+                ", dataPrenotazione=" + dataPrenotazione +
+                ", dataPrestazione=" + dataPrestazione +
+                ", utente=" + utente +
+                ", prestazioni=" + prestazioni +
+                ", statoPrenotazione=" + statoPrenotazione +
+                '}';
     }
 }

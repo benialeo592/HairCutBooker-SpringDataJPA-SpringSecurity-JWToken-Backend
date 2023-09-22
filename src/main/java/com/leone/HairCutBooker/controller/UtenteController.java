@@ -42,14 +42,19 @@ public class UtenteController {
         return ResponseEntity.ok().body(this.utenteService.aggiornaPasswordUtente(id, password));
     }
 
+    @GetMapping("/{id}/bookings")
+    public ResponseEntity<List<PrenotazioneDTO>> prendiPrenotazioniUtente(@PathVariable Long id){
+        return ResponseEntity.ok().body(this.utenteService.getPrenotazioniUtente(id));
+    }
+
     @PostMapping("/{id}/booking/create")
     public ResponseEntity<List<PrenotazioneDTO>> aggiungiPrenotazioneUtente(@PathVariable Long id, @RequestBody Prenotazione prenotazione){
         return ResponseEntity.ok().body(this.utenteService.aggiungiPrenotazioneAdUtente(id, prenotazione));
     }
 
     @DeleteMapping("/{idUtente}/booking/delete")
-    public List<Prenotazione> cancellaPrenotazioneUtente(@PathVariable Long idUtente, @RequestParam Long idPrenotazione){
-        return this.utenteService.rimuoviPrenotazioneDaUtente(idUtente, idPrenotazione);
+    public void cancellaPrenotazioneUtente(@PathVariable Long idUtente, @RequestParam Long idPrenotazione){
+        this.utenteService.rimuoviPrenotazioneDaUtente(idUtente, idPrenotazione);
     }
 
 }
