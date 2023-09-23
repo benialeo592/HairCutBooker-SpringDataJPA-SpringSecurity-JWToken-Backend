@@ -17,8 +17,8 @@ import java.util.Set;
 @Service
 public class PrenotazioneService {
 
-    private PrenotazioneRepo prenotazioneRepo;
-    private PrestazioneRepo prestazioneRepo;
+    private final PrenotazioneRepo prenotazioneRepo;
+    private final PrestazioneRepo prestazioneRepo;
 
     @Autowired
     public PrenotazioneService(PrenotazioneRepo prenotazioneRepo, PrestazioneRepo prestazioneRepo){
