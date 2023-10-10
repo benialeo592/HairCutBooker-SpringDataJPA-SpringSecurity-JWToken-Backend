@@ -37,7 +37,7 @@ public class SecurityFilterChainConfig {
         http.sessionManagement(security -> security.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(request -> request.requestMatchers(mvc.pattern("/api/auth/**")).permitAll());
         http.authorizeHttpRequests(request -> request.requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(UserRole.ADMIN.name()));
-        //http.authorizeHttpRequests(request -> request.requestMatchers(mvc.pattern("/api/**")).authenticated());
+        http.authorizeHttpRequests(request -> request.requestMatchers(mvc.pattern("/api/**")).authenticated());
         http.addFilterBefore(this.jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.csrf(AbstractHttpConfigurer::disable);
         return http.build();

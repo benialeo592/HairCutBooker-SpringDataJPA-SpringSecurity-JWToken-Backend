@@ -15,9 +15,9 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/admin")
-public class ReservationController {
+public class AdminReservationController {
 
-    private ReservationService reservationService;
+    private final ReservationService reservationService;
 
     @GetMapping("/reservations")
     public ResponseEntity<List<ReservationDTOResponse>>getAll(){

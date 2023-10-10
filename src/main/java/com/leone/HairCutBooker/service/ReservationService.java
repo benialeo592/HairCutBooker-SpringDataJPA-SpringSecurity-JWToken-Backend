@@ -23,10 +23,10 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ReservationService {
 
-    private ReservationRepo reservationRepo;
-    private UserRepo userRepo;
-    private PerformanceRepo performanceRepo;
-    private JwtUtil jwtUtil;
+    private final ReservationRepo reservationRepo;
+    private final UserRepo userRepo;
+    private final PerformanceRepo performanceRepo;
+    private final JwtUtil jwtUtil;
 
     public List<ReservationDTOResponse> all(){
         List<Reservation> list = reservationRepo.findAll();
@@ -39,15 +39,15 @@ public class ReservationService {
     }
 
     public ReservationDTOResponse create(ReservationDTORequest reservation, String token){
-        String email = this.jwtUtil.extractUsername(token);
+        String email = this.jwtUtil.extractUsername(token.substring(7));
         Optional<User> foundUser = this.userRepo.findByEmail(email);
         if(foundUser.isEmpty()){
             throw new EntityNotFoundException("User doesn't'exist");
         }
         Reservation reservationToStore = this.convertToReservationModel(reservation);
-        foundUser.get().getReservations().add(reservationToStore);
-        this.userRepo.save(foundUser.get());
-        return this.convertModelToReservationDTOResponse(reservationToStore);
+        reservationToStore.setUser(foundUser.get());
+        Reservation savedReservation = this.reservationRepo.save(reservationToStore);
+        return this.convertModelToReservationDTOResponse(savedReservation);
     }
 
     public ReservationDTOResponse createByAdmin(ReservationDTORequest reservation, Long id){

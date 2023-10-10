@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class ReservationController {
 
-    private ReservationService reservationService;
+    private final ReservationService reservationService;
 
     @PostMapping("/reservation")
     public ResponseEntity<ReservationDTOResponse> storeReservation(@RequestBody ReservationDTORequest reservation, @RequestHeader (name="Authorization") String token){

@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UserService {
 
-    private UserRepo userRepo;
+    private final UserRepo userRepo;
 
 }

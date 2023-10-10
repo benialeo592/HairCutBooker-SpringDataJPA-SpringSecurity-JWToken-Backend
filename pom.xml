@@ -8,10 +8,10 @@
 		<version>3.1.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.leone</groupId>
-	<artifactId>HairCutBooker</artifactId>
+	<groupId>com.leone.HairCutBooker</groupId>
+	<artifactId>HairCutBookerApplication</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<name>HairCutBooker</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>

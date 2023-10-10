@@ -1,4 +1,4 @@
-package com.leone.HairCutBooker.HairCutBookerApplication;
+package com.leone.HairCutBooker;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
