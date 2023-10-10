@@ -13,7 +13,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReservationRepo extends JpaRepository<Reservation, Long> {
 
-    @Modifying
-    @Query("UPDATE Reservation r SET r.performances = :performance WHERE r.id = :reservationId")
-    void addPerformanceToReservation(@Param("reservationId") Long reservationId, @Param("performance") Performance performance);
 }

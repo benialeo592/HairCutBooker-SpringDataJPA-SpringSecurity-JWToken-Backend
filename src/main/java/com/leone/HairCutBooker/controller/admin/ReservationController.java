@@ -26,7 +26,7 @@ public class ReservationController {
 
     @PostMapping("/reservation/{userId}")
     public ResponseEntity<ReservationDTOResponse> storeReservation(@RequestBody @Valid ReservationDTORequest reservationRequest, @PathVariable Long userId ){
-        return ResponseEntity.ok().body(this.reservationService.create(reservationRequest, userId));
+        return ResponseEntity.ok().body(this.reservationService.createByAdmin(reservationRequest, userId));
     }
 
     @PutMapping("/reservation/{id}")
@@ -45,6 +45,6 @@ public class ReservationController {
 
     @DeleteMapping("/reservation/{idReservation}/performance/{idPerformance}/remove")
     public ResponseEntity<ReservationDTOResponse> removePerformanceToReservation(@PathVariable Long idReservation, @PathVariable Long idPerformance){
-        return ResponseEntity.ok().body(this.reservationService.removePerformanceToExistingReservation(idReservation, idPerformance));
+        return ResponseEntity.ok().body(this.reservationService.removePerformanceFromExistingReservation(idReservation, idPerformance));
     }
 }

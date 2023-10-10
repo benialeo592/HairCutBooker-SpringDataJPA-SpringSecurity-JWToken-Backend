@@ -10,6 +10,7 @@ import com.leone.HairCutBooker.model.User;
 import com.leone.HairCutBooker.repository.PerformanceRepo;
 import com.leone.HairCutBooker.repository.ReservationRepo;
 import com.leone.HairCutBooker.repository.UserRepo;
+import com.leone.HairCutBooker.security.jwt.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class ReservationService {
     private ReservationRepo reservationRepo;
     private UserRepo userRepo;
     private PerformanceRepo performanceRepo;
+    private JwtUtil jwtUtil;
 
     public List<ReservationDTOResponse> all(){
         List<Reservation> list = reservationRepo.findAll();
@@ -36,7 +38,19 @@ public class ReservationService {
                 .collect(Collectors.toList());
     }
 
-    public ReservationDTOResponse create(ReservationDTORequest reservation, Long id){
+    public ReservationDTOResponse create(ReservationDTORequest reservation, String token){
+        String email = this.jwtUtil.extractUsername(token);
+        Optional<User> foundUser = this.userRepo.findByEmail(email);
+        if(foundUser.isEmpty()){
+            throw new EntityNotFoundException("User doesn't'exist");
+        }
+        Reservation reservationToStore = this.convertToReservationModel(reservation);
+        foundUser.get().getReservations().add(reservationToStore);
+        this.userRepo.save(foundUser.get());
+        return this.convertModelToReservationDTOResponse(reservationToStore);
+    }
+
+    public ReservationDTOResponse createByAdmin(ReservationDTORequest reservation, Long id){
         Optional<User> foundUser = userRepo.findById(id);
         if(foundUser.isEmpty()){
             throw new EntityNotFoundException("User doesn't'exist");
@@ -73,13 +87,12 @@ public class ReservationService {
         if(foundReservation.isEmpty() || foundPerformance.isEmpty()){
             throw new EntityNotFoundException("Not found");
         }
-        this.reservationRepo.addPerformanceToReservation(foundReservation.get().getId(),foundPerformance.get());
-        // foundReservation.get().getPerformances().add(foundPerformance.get());
-        // Reservation savedReservation = this.reservationRepo.save(foundReservation.get());
-        return null ;//this.convertModelToReservationDTOResponse(savedReservation);
+        foundReservation.get().getPerformances().add(foundPerformance.get());
+        Reservation reservation = this.reservationRepo.save(foundReservation.get());
+        return this.convertModelToReservationDTOResponse(reservation);
     }
 
-    public ReservationDTOResponse removePerformanceToExistingReservation(Long idReservation, Long idPerformance){
+    public ReservationDTOResponse removePerformanceFromExistingReservation(Long idReservation, Long idPerformance){
         Optional<Reservation> foundReservation = reservationRepo.findById(idReservation);
         Optional<Performance> foundPerformance = performanceRepo.findById(idPerformance);
         if(foundReservation.isEmpty() || foundPerformance.isEmpty()){
@@ -94,6 +107,8 @@ public class ReservationService {
             Reservation savedReservation = reservationRepo.save(foundReservation.get());
             return this.convertModelToReservationDTOResponse(savedReservation);
     }
+
+
 
     private Reservation convertToReservationModel(ReservationDTORequest request){
         Reservation reservation = new Reservation();

@@ -12,6 +12,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @AllArgsConstructor
+@EnableWebSecurity
 public class SecurityFilterChainConfig {
 
     private JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -35,7 +37,7 @@ public class SecurityFilterChainConfig {
         http.sessionManagement(security -> security.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(request -> request.requestMatchers(mvc.pattern("/api/auth/**")).permitAll());
         http.authorizeHttpRequests(request -> request.requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(UserRole.ADMIN.name()));
-        http.authorizeHttpRequests(request -> request.requestMatchers(mvc.pattern("/api/**")).authenticated());
+        //http.authorizeHttpRequests(request -> request.requestMatchers(mvc.pattern("/api/**")).authenticated());
         http.addFilterBefore(this.jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.csrf(AbstractHttpConfigurer::disable);
         return http.build();
