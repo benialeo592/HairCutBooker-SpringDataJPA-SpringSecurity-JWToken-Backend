@@ -3,6 +3,7 @@ package com.leone.HairCutBooker.service;
 import com.leone.HairCutBooker.DTO.PerformanceDTORequest;
 import com.leone.HairCutBooker.DTO.ReservationDTORequest;
 import com.leone.HairCutBooker.DTO.ReservationDTOResponse;
+import com.leone.HairCutBooker.exception.CustomValidationException;
 import com.leone.HairCutBooker.exception.ResourceNotFoundException;
 import com.leone.HairCutBooker.model.Performance;
 import com.leone.HairCutBooker.model.Reservation;
@@ -12,9 +13,12 @@ import com.leone.HairCutBooker.repository.ReservationRepo;
 import com.leone.HairCutBooker.repository.UserRepo;
 import com.leone.HairCutBooker.security.jwt.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ValidationException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,6 +37,21 @@ public class ReservationService {
         if(list.isEmpty()){
             throw new ResourceNotFoundException("No reservations found");
         }
+        return list.stream()
+                .map(this::convertModelToReservationDTOResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<ReservationDTOResponse>userReservations(Long id){
+        List<Reservation> list = this.reservationRepo.findAllByUserId(id);
+        return list.stream()
+                .map(this::convertModelToReservationDTOResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<ReservationDTOResponse>fromBookingDateReservations(LocalDate bookingDate, String sort){
+        Sort sortOrder = sort.equals("ASC") ? Sort.by(Sort.Direction.ASC, "bookingDate") : Sort.by(Sort.Direction.DESC, "bookingDate");
+        List<Reservation> list = this.reservationRepo.findAllByBookingDateLessThanEqual(bookingDate, sortOrder);
         return list.stream()
                 .map(this::convertModelToReservationDTOResponse)
                 .collect(Collectors.toList());

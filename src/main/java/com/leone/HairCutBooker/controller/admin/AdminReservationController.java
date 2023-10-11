@@ -6,10 +6,12 @@ import com.leone.HairCutBooker.DTO.ReservationDTOResponse;
 import com.leone.HairCutBooker.model.Performance;
 import com.leone.HairCutBooker.service.ReservationService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -22,6 +24,16 @@ public class AdminReservationController {
     @GetMapping("/reservations")
     public ResponseEntity<List<ReservationDTOResponse>>getAll(){
         return ResponseEntity.ok().body(this.reservationService.all());
+    }
+
+    @GetMapping("/reservations/user")
+    public ResponseEntity<List<ReservationDTOResponse>>getUserReservations(@RequestParam Long id){
+        return ResponseEntity.ok().body(this.reservationService.userReservations(id));
+    }
+
+    @GetMapping("/reservations/booking-date")
+    public ResponseEntity<List<ReservationDTOResponse>>getDayReservations(@RequestParam LocalDate bookingDate,@RequestParam String sortOrder){
+        return ResponseEntity.ok().body(this.reservationService.fromBookingDateReservations(bookingDate, sortOrder));
     }
 
     @PostMapping("/reservation/{userId}")

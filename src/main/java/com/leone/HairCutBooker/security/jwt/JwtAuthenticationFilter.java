@@ -1,5 +1,6 @@
 package com.leone.HairCutBooker.security.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        try{
         String header = request.getHeader("Authorization");
         if(header != null && header.startsWith("Bearer ")){
             String jwt = header.substring(7);
@@ -38,6 +40,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         }
-        filterChain.doFilter(request,response);
+        }catch(ExpiredJwtException ex){
+            System.out.println("Invalid Token");
+        }finally {
+            filterChain.doFilter(request,response);
+        }
+
     }
 }
